@@ -43,7 +43,7 @@ This endpoint is used to register new user
 
 | Status Code | Description           |
 | ----------- | --------------------- |
-| 200         | OK. Registry successful. |
+| 201         | OK. Registry successful. |
 
 #### Response Body
 
