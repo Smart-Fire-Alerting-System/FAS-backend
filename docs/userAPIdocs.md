@@ -1,3 +1,4 @@
+- [Registry API](#register-api)
 - [Login API](#login-api)
 
 
@@ -90,6 +91,7 @@ This endpoint is used to register new user
 }
 ```
 
+---
 
 # Login API
 
