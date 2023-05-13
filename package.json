@@ -178,7 +178,8 @@
     "wrappy": "^1.0.2",
     "ws": "^7.5.9",
     "xtend": "^4.0.2",
-    "yallist": "^4.0.0"
+    "yallist": "^4.0.0",
+    "yamljs": "^0.3.0"
   },
   "scripts": {
     "start": "nodemon server.js",

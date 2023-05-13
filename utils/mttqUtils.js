@@ -14,6 +14,7 @@ function publishData(feedName, data, callback) {
         value: data,
     });
     client.on("connect", function () {
+        console.log("Successfully connected to adafruit");
         client.publish(`${username}/feeds/${feedName}`, jsonData, (error) => {
             if (error !== undefined) {
                 callback(false);

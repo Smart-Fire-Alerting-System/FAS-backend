@@ -10,7 +10,7 @@ const realtimeUpdate = (io) => {
     });
 
     client.on("connect", () => {
-        // console.log("Connected to adafruit");
+        console.log("Connected to adafruit");
         // Subscribe to the temperature feed
         client.subscribe(`${username}/feeds/yolo-sensor`);
         // console.log("Subscribe temperature feed");
@@ -38,20 +38,22 @@ const realtimeUpdate = (io) => {
 
         if (topic.endsWith("yolo-sensor")) {
             // Emit a "temperatureUpdate" event with the new temperature data
-            io.emit("temperatureUpdate", { temperature: data });
+            io.emit("temperatureUpdate", { temperature: parseInt(data) });
+            console.log(parseInt(data));
             console.log(`Temperature: ${data}°C`);
         } else if (topic.endsWith("dht20-humid")) {
             // Emit a "humidityUpdate" event with the new humidity data
-            io.emit("humidityUpdate", { humidity: data });
+            io.emit("humidityUpdate", { humidity: parseInt(data) });
+            console.log(parseInt(data));
             console.log(`Humidity: ${data}%`);
         } else if (topic.endsWith("yolo-fan")) {
             // Emit a "fanUpdate" event with the new fan data
-            io.emit("fanUpdate", { fan: data });
+            io.emit("fanUpdate", { fan: parseInt(data) });
             console.log(`Fan: ${data}`);
         
         } else if (topic.endsWith("yolo-led")) {
             // Emit a "lightUpdate" event with the new light data
-            io.emit("ledUpdate", { led: data });
+            io.emit("ledUpdate", { led: parseInt(data) });
             console.log(`Light: ${data}`);
         }
     });
