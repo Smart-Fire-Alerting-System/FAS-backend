@@ -48,9 +48,9 @@ router.get("/lastFan",verifyToken, dataController.lastFan)
 
 router.get("/lastLed",verifyToken, dataController.lastLed);
 
-router.get("/daytemperatures", verifyToken, dataController.getDayTemperatures);
-router.get("/dayhumids", verifyToken, dataController.getDayHumidities);
-
+router.get("/weektemperatures", verifyToken, dataController.getDayTemperatures);
+router.get("/weekhumids", verifyToken, dataController.getDayHumidities);
+router.get("/todayWarnings", verifyToken, dataController.getWarningsInDay);
 
 
 router.post("/setFan",verifyToken, dataController.setFan);

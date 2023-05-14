@@ -121,54 +121,45 @@ export const getDayTemperatures = async (req, res, next) => {
     let now = true;
     let today = new Date();
     console.log(today);
-    if (date && dataUtils.isIsoDate(date)) {
-        let d = new Date(date);
-        if (
-            today.getFullYear() == d.getFullYear() &&
-            today.getMonth() == d.getMonth() &&
-            today.getDate() == d.getDate()
-        ) {
-            params = {
-                hours: 24,
-            };
-        } else {
-            let startD = new Date(
-                `${d.getFullYear()} ${d.getMonth() + 1} ${d.getDate()-1}`
-            );
-            let startDString = startD.toISOString();
-            let endD = new Date(
-                `${d.getFullYear()} ${d.getMonth() + 1} ${d.getDate() + 1}`
-            );
-            let endDString = endD.toISOString();
-            params = {
-                start_time: startDString,
-                end_time: endDString,
-            };
-            now = false;
-        }
-    } else {
-        params = {
-            hours: 24,
-        };
+    let startD;
+    let endD;
+    if (today.getHours() < 7) {
+        startD = new Date(
+            `${today.getFullYear()} ${today.getMonth() + 1} ${today.getDate()-7}`
+        );
+        endD = new Date(
+            `${today.getFullYear()} ${today.getMonth() + 1} ${today.getDate()}`
+        );
     }
+    else {
+        startD = new Date(
+            `${today.getFullYear()} ${today.getMonth() + 1} ${today.getDate()-8}`
+        );
+        endD = new Date(
+            `${today.getFullYear()} ${today.getMonth() + 1} ${today.getDate()-1}`
+        );
+    }
+    
+    let startDString = startD.toISOString().substring(0, 10) + "T17:00:00Z";
+    
+    let endDString = endD.toISOString().substring(0, 10) + "T17:00:00Z";
+
+// TODO : Substract 7 hour for the 
+    console.log(startDString);
+    console.log(endDString);
+    params = {
+        start_time: startDString,
+        end_time: endDString,
+    };
+    now = false;
+
     adaRequest
         .get(`/feeds/yolo-sensor/data/chart`, {
             params: params,
         })
         .then(({ data }) => {
             let values = data["data"];
-            let ld = new Date(values[values.length - 1][0]);
-            let newValues = values.filter((e) => {
-                const d = new Date(e[0]);
-                if (
-                    d.getHours() == ld.getHours() &&
-                    d.getDate() == ld.getDate() - 1
-                ) {
-                    return false;
-                }
-                return true;
-            });
-            let result = dataUtils.dataCal(newValues, now);
+            let result = dataUtils.dataCal(values, now);
             res.status(200).json({ feed_key: "yolo-sensor", data: result });
         })
         .catch((error) => {
@@ -182,55 +173,47 @@ export const getDayHumidities = async (req, res, next) => {
     let date = req.query["date"] ? req.query["date"] : null;
     let params;
     let now = true;
-    if (date && dataUtils.isIsoDate(date)) {
-        let today = new Date();
-        let d = new Date(date);
-        if (
-            today.getFullYear() == d.getFullYear() &&
-            today.getMonth() == d.getMonth() &&
-            today.getDate() == d.getDate()
-        ) {
-            params = {
-                hours: 24,
-            };
-        } else {
-            let startD = new Date(
-                `${d.getFullYear()} ${d.getMonth() + 1} ${d.getDate()-1}`
-            );
-            let startDString = startD.toISOString();
-            let endD = new Date(
-                `${d.getFullYear()} ${d.getMonth() + 1} ${d.getDate() + 1}`
-            );
-            let endDString = endD.toISOString();
-            params = {
-                start_time: startDString,
-                end_time: endDString,
-            };
-            now = false;
-        }
-    } else {
-        params = {
-            hours: 24,
-        };
+    let today = new Date();
+    console.log(today);
+    
+    let startD;
+    let endD;
+    if (today.getHours() < 7) {
+        startD = new Date(
+            `${today.getFullYear()} ${today.getMonth() + 1} ${today.getDate()-7}`
+        );
+        endD = new Date(
+            `${today.getFullYear()} ${today.getMonth() + 1} ${today.getDate()}`
+        );
     }
+    else {
+        startD = new Date(
+            `${today.getFullYear()} ${today.getMonth() + 1} ${today.getDate()-8}`
+        );
+        endD = new Date(
+            `${today.getFullYear()} ${today.getMonth() + 1} ${today.getDate()-1}`
+        );
+    }
+    
+    let startDString = startD.toISOString().substring(0, 10) + "T17:00:00Z";
+    
+    let endDString = endD.toISOString().substring(0, 10) + "T17:00:00Z";
+
+    console.log(startDString);
+    console.log(endDString);
+    params = {
+        start_time: startDString,
+        end_time: endDString,
+    };
+    now = false;
+
     adaRequest
         .get(`/feeds/dht20-humid/data/chart`, {
             params: params,
         })
         .then(({ data }) => {
             let values = data["data"];
-            let ld = new Date(values[values.length - 1][0]);
-            let newValues = values.filter((e) => {
-                const d = new Date(e[0]);
-                if (
-                    d.getHours() == ld.getHours() &&
-                    d.getDate() == ld.getDate() - 1
-                ) {
-                    return false;
-                }
-                return true;
-            });
-            let result = dataUtils.dataCal(newValues, now);
+            let result = dataUtils.dataCal(values, now);
             res.status(200).json({ feed_key: "dht20-humid", data: result });
         })
         .catch((error) => {
@@ -239,3 +222,46 @@ export const getDayHumidities = async (req, res, next) => {
         });
 };
 
+export const getWarningsInDay = async (req, res, next) => {
+    // let date = req.query["date"] ? req.query["date"] : null;
+    let params;
+    let today = new Date();
+    console.log(today);
+
+
+    let endDString;
+    let startDString;
+    if (today.getHours() < 7) {
+        startDString = today.toISOString().substring(0, 10) + "T17:00:00Z";
+    }
+    else {
+        let startD = new Date(
+            `${today.getFullYear()} ${today.getMonth() + 1} ${today.getDate()-1}`
+        );
+        startDString = startD.toDateString().substring(0, 10) + "T17:00:00Z";
+    }
+    // today.setHours();
+    endDString = today.toISOString();
+    
+
+    console.log(startDString);
+    console.log(endDString);
+    params = {
+        start_time: startDString,
+        end_time: endDString,
+    };
+
+    adaRequest
+        .get(`/feeds/yolo-sensor/data/chart`, {
+            params: params,
+        })
+        .then(({ data }) => {
+            let values = data["data"];
+            let result = dataUtils.retrieveNumberOfHighTemp(values);
+            res.status(200).json({ warning_times: result });
+        })
+        .catch((error) => {
+            res.status(400);
+            return next(new Error(error.message));
+        });
+}

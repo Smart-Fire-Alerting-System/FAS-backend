@@ -1,22 +1,15 @@
-Base url: `http://localhost:5000`
+Base url: `http://localhost:5000/`
 
 - [Get The Latest Temperature API](#get-the-latest-temperature-api)
-  
 - [Get The Latest Humidity API](#get-the-latest-humidity-api)
-  
 - [Get The Latest Light Status API](#get-the-latest-light-status-api)
 - [Get The Latest Fan Data API](#get-the-latest-fan-data-api)
-  
- 
-- [Set Fan Data API](#set-fan-data-api)
-  
-- [Set LED Data API](#set-led-data-api)
-  
-- [Get Daily Temperature API](#get-daily-temperature-api)
-  
-- [Get Daily Humidity API](#get-daily-humidity-api)
-  
 
+- [Set Fan Data API](#set-fan-data-api)
+- [Set LED Data API](#set-led-data-api)
+- [Get Last 7 Days Temperature API](#get-last-7-days-temperature-api)
+- [Get Last 7 Days Humidity API](#get-last-7-days-temperature-api)
+- [Get warnings API](#get-the-number-of-warnings-in-day-api)
 
 # Get The Latest Temperature API
 
@@ -72,7 +65,6 @@ This API endpoint retrieves the latest temperature data.
 }
 ```
 
-
 # Get The Latest Humidity API
 
 This API endpoint retrieves the current humidity data.
@@ -103,7 +95,7 @@ This API endpoint retrieves the current humidity data.
 | Property   | Data type | Description                               |
 | ---------- | --------- | ----------------------------------------- |
 | message    | string    | `successful`.                             |
-| feed_key   | string    | `dht20-humid`.                               |
+| feed_key   | string    | `dht20-humid`.                            |
 | value      | string    | Latest humidity value.                    |
 | created_at | string    | The time it was created. ISO Date Format. |
 
@@ -157,7 +149,7 @@ This API endpoint retrieves the latest fan status.
 | Property   | Data type | Description                               |
 | ---------- | --------- | ----------------------------------------- |
 | message    | string    | `successful`.                             |
-| feed_key   | string    | `yolo-fan`.                                    |
+| feed_key   | string    | `yolo-fan`.                               |
 | value      | string    | Latest fan status. "0" is off, "1" is on. |
 | created_at | string    | The time it was created. ISO Date Format. |
 
@@ -180,7 +172,6 @@ This API endpoint retrieves the latest fan status.
     "message": "successful"
 }
 ```
-
 
 # Get The Latest Light Status API
 
@@ -212,7 +203,7 @@ This API endpoint retrieves the latest light status.
 | Property   | Data type | Description                                 |
 | ---------- | --------- | ------------------------------------------- |
 | message    | string    | `successful`.                               |
-| feed_key   | string    | `yolo-led`.                                    |
+| feed_key   | string    | `yolo-led`.                                 |
 | value      | string    | Latest light status. "0" is off, "1" is on. |
 | created_at | string    | The time it was created. ISO Date Format.   |
 
@@ -236,7 +227,6 @@ This API endpoint retrieves the latest light status.
 }
 ```
 
-
 # Set Fan Data API
 
 This endpoint is used to set fan status.
@@ -254,15 +244,15 @@ This endpoint is used to set fan status.
 
 ### Request Body
 
-| Property | Type   | Description                                                     |
-| -------- | ------ | --------------------------------------------------------------- |
+| Property | Type   | Description                                                                        |
+| -------- | ------ | ---------------------------------------------------------------------------------- |
 | value    | string | Required. The value set to fan level. Value range is from "0" (min) to "100" (max) |
 
 ### Example
 
 ```json
 {
-    "value": "100"
+  "value": "100"
 }
 ```
 
@@ -315,7 +305,6 @@ This endpoint is used to set fan status.
     "message": "Value is invalid"
 }
 ```
-
 
 # Set LED Data API
 
@@ -342,7 +331,7 @@ This endpoint is used to set LED status.
 
 ```json
 {
-    "value": "1"
+  "value": "1"
 }
 ```
 
@@ -396,14 +385,13 @@ This endpoint is used to set LED status.
 }
 ```
 
+# Get Last 7 Days Temperature API
 
-# Get Daily Temperature API
-
-This endpoint is used to get the temperature in 24 hours.
+This endpoint is used to get the each day average temperatures in 7 days.
 
 ## Request
 
-`GET api/data/daytemperatures`
+`GET api/data/weektemperatures`
 
 ### Request Header
 
@@ -417,7 +405,7 @@ This endpoint is used to get the temperature in 24 hours.
 
 ### Example
 
-`api/data/daytemperatures?date=2023-02-18T17:00:00.000Z`
+`api/data/weektemperatures`
 
 ## Response
 
@@ -444,37 +432,34 @@ This endpoint is used to get the temperature in 24 hours.
     "feed_key": "yolo-sensor",
     "data": [
         {
-        "hour": 0,
+        "dow": "Sunday",
         "value": 32.09090909090909
         },
         ...
         {
-        "hour": 17,
+        "dow": "Tuesday",
         "value": 31.78048780487805
         },
         {
-        "hour": 18,
+        "dow": "Wesnesday",
         "value": 30.779661016949152
         },
         ...
         {
-        "hour": 23,
+        "dow": "Yesterday",
         "value": 30.346153846153847
         }
     ]
 }
 ```
 
+# Get Last 7 Days Humidity API
 
-
-
-# Get Daily Humidity API
-
-This endpoint is used to get the humidity in 24 hours.
+This endpoint is used to get the avarage humidity of each day in last 7 days.
 
 ## Request
 
-`GET api/data/dayhumidity`
+`GET api/data/weekhumids`
 
 ### Request Header
 
@@ -488,7 +473,7 @@ This endpoint is used to get the humidity in 24 hours.
 
 ### Example
 
-`api/data/dayhumidities?date=2023-02-18T17:00:00.000Z`
+`api/data/weekhumids`
 
 ## Response
 
@@ -515,23 +500,63 @@ This endpoint is used to get the humidity in 24 hours.
     "feed_key": "dht20-humid",
     "data": [
         {
-        "hour": 0,
+        "dow": "Sunday",
         "value": 32.09090909090909
         },
         ...
         {
-        "hour": 17,
+        "dow": "Tuesday",
         "value": 31.78048780487805
         },
         {
-        "hour": 18,
+        "dow": "Wesnesday",
         "value": 30.779661016949152
         },
         ...
         {
-        "hour": 23,
+        "dow": "Yesterday",
         "value": 30.346153846153847
         }
     ]
+}
+```
+
+# Get The Number of Warnings in day API
+
+This API endpoint count the warning which has high temperature in day.
+
+## Request
+
+`GET api/data/todayWarnings`
+
+### Request Header
+
+| Header        | Description                               |
+| ------------- | ----------------------------------------- |
+| Content-Type  | Required. Set to `application/json`.      |
+| Authorization | Required. Set to `Bearer <access token>`. |
+
+## Response
+
+### Successful Response
+
+#### HTTP Status Code
+
+| Status Code | Description     |
+| ----------- | --------------- |
+| 200         | OK. Successful. |
+
+#### Response Body
+
+| Property      | Data type | Description       |
+| ------------- | --------- | ----------------- |
+| warning_times | integer   | Number of warning |
+
+#### Example
+
+```json
+{
+    HTTP/1.1 2.0 OK
+    "warning_times": 3
 }
 ```
