@@ -121,24 +121,12 @@ export const getDayTemperatures = async (req, res, next) => {
     let now = true;
     let today = new Date();
     console.log(today);
-    let startD;
-    let endD;
-    if (today.getHours() < 7) {
-        startD = new Date(
-            `${today.getFullYear()} ${today.getMonth() + 1} ${today.getDate()-7}`
-        );
-        endD = new Date(
-            `${today.getFullYear()} ${today.getMonth() + 1} ${today.getDate()}`
-        );
-    }
-    else {
-        startD = new Date(
-            `${today.getFullYear()} ${today.getMonth() + 1} ${today.getDate()-8}`
-        );
-        endD = new Date(
-            `${today.getFullYear()} ${today.getMonth() + 1} ${today.getDate()-1}`
-        );
-    }
+    let startD =  new Date(
+        `${today.getFullYear()} ${today.getMonth() + 1} ${today.getDate()-7}`
+    );;
+    let endD = endD = new Date(
+        `${today.getFullYear()} ${today.getMonth() + 1} ${today.getDate()}`
+    );
     
     let startDString = startD.toISOString().substring(0, 10) + "T17:00:00Z";
     
@@ -178,23 +166,14 @@ export const getDayHumidities = async (req, res, next) => {
     
     let startD;
     let endD;
-    if (today.getHours() < 7) {
-        startD = new Date(
-            `${today.getFullYear()} ${today.getMonth() + 1} ${today.getDate()-7}`
-        );
-        endD = new Date(
-            `${today.getFullYear()} ${today.getMonth() + 1} ${today.getDate()}`
-        );
-    }
-    else {
-        startD = new Date(
-            `${today.getFullYear()} ${today.getMonth() + 1} ${today.getDate()-8}`
-        );
-        endD = new Date(
-            `${today.getFullYear()} ${today.getMonth() + 1} ${today.getDate()-1}`
-        );
-    }
     
+    startD = new Date(
+        `${today.getFullYear()} ${today.getMonth() + 1} ${today.getDate()-7}`
+    );
+    endD = new Date(
+        `${today.getFullYear()} ${today.getMonth() + 1} ${today.getDate()}`
+    );
+
     let startDString = startD.toISOString().substring(0, 10) + "T17:00:00Z";
     
     let endDString = endD.toISOString().substring(0, 10) + "T17:00:00Z";
