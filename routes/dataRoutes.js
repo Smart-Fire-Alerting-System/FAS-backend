@@ -40,21 +40,21 @@ const router = express();
  *                                  example: Leanne Graham
  *  
  * */
-router.get("/currentTemperature", verifyToken,  dataController.currentTemperature);
+router.get("/currentTemperature",   dataController.currentTemperature);
 
-router.get("/currentHumid",verifyToken, dataController.currentHumid);
+router.get("/currentHumid", dataController.currentHumid);
 
-router.get("/lastFan",verifyToken, dataController.lastFan)
+router.get("/lastFan", dataController.lastFan)
 
-router.get("/lastLed",verifyToken, dataController.lastLed);
+router.get("/lastLed", dataController.lastLed);
 
-router.get("/weektemperatures", verifyToken, dataController.getDayTemperatures);
-router.get("/weekhumids", verifyToken, dataController.getDayHumidities);
-router.get("/todayWarnings", verifyToken, dataController.getWarningsInDay);
+router.get("/weektemperatures",  dataController.getDayTemperatures);
+router.get("/weekhumids",  dataController.getDayHumidities);
+router.get("/todayWarnings",  dataController.getWarningsInDay);
 
 
-router.post("/setFan",verifyToken, dataController.setFan);
+router.post("/setFan", dataController.setFan);
 
-router.post("/toggleLed", verifyToken, dataController.toggleLed);
+router.post("/toggleLed",  dataController.toggleLed);
 
 export default router;
