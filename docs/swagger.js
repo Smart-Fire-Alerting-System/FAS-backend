@@ -2,7 +2,7 @@ import swaggerJSDoc from "swagger-jsdoc";
 import swaggerUi from "swagger-ui-express";
 
 const swaggerDefinition = {
-    openapi: '3.0.0',
+    swagger: '3.0.0',
     info: {
       title: 'Express API for JSONPlaceholder',
       version: '1.0.0',

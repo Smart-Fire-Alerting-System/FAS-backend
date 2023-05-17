@@ -1,0 +1,123 @@
+
+
+openapi: "3.0.3"
+info:
+  title: Fire Alarming System API
+  description: This is my API Documentation for FAS application
+  
+  contact:
+    email: ndtuanftd@gmail.com
+  license:
+    name: Apache 2.0
+    url: "http://www.apache.org/liscences/LIS"
+  version: "1.0"
+servers:
+  - url: http://localhost:5000
+    description: THis is my local Server
+  # -url: http://example.com/
+  # description: This is my original URL
+
+
+tags: 
+  - name: User
+
+
+
+
+#Returns User from Get request
+paths:
+  /api/user/register:
+    post:
+      tags:
+        - User
+      summary: Register a new user
+      description: Register a new user
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/User'
+      responses:
+        '201':
+          description: successful created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserResponse'
+        '400':
+          description: Bad Request. Email has already used!
+
+components:
+  schemas:
+    User:
+      type: object
+      required:
+        - email
+        - password
+        - name
+      properties:
+        email:
+          type: string
+          example: ntuan@gmail.com
+        password:
+          type: string
+          example: 12345690
+        name:
+          type: string
+          example: ndtuan
+        
+    
+    UserResponse:
+      type: object
+      properties:
+        _id: 
+          type: string
+          description: User ID.
+          example: 63fa0de6bc0cfe32d5705230
+        email:
+          type: string
+          description: Email.
+          example: ntuan@gmail.com
+        name:
+          type: string
+          description: Name.
+          example: ndtuan
+        avatar:
+          type: string
+          description: Avatar URL.
+          example: 'http://example.com'
+        token:
+          type: string
+          description: Access token
+          example: 'eyJh1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiIkMmEkMTAkTmRDS2h2ZWlTbWZsM1NQLnY1LzRrdXlCVE8zOGtiekRsOFRXdmJoZzBDNFRoWXZUelZ0aU8iLCJpYXQiOjE2ODMzODk1NjMsImV4cCI6MTY4NTk4MTU2M30.WrreY0lSlvBGSzOXyRxAgjpzd1-TWpVCZNYtssb7sT4'
+
+    Order:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+          example: 10
+        petId:
+          type: integer
+          format: int64
+          example: 198772
+        quantity:
+          type: integer
+          format: int32
+          example: 7
+        shipDate:
+          type: string
+          format: date-time
+        status:
+          type: string
+          description: Order Status
+          example: approved
+          enum:
+            - placed
+            - approved
+            - delivered
+        complete:
+          type: boolean
+      xml:
+        name: order

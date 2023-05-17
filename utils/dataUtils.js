@@ -73,6 +73,7 @@ export function dataCal(data, today) {
         //     latest.setHours(23);
         // }
         let averageData = extractLast7DaysAverageData(data); 
+        console.log(averageData);
 
         let last7DaysOfWeeksNames = getLast7DaysOfWeeksNames(new Date());
         for (let count = 6; count >= 0; count--) {
