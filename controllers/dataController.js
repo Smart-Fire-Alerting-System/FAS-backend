@@ -124,7 +124,7 @@ export const getDayTemperatures = async (req, res, next) => {
     let startD =  new Date(
         `${today.getFullYear()} ${today.getMonth() + 1} ${today.getDate()-7}`
     );;
-    let endD = endD = new Date(
+    let endD  = new Date(
         `${today.getFullYear()} ${today.getMonth() + 1} ${today.getDate()}`
     );
     
