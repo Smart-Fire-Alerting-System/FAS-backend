@@ -80,7 +80,7 @@ export function dataCal(data, today) {
 
 export const retrieveNumberOfHighTemp = (data) => {
     console.log(data);
-    const highTemp = 30;
+    const highTemp = 40;
     if (data.length > 0) {
         let count = 0;
         for(let i = 0; i < data.length; i++) {
