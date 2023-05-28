@@ -51,7 +51,7 @@ router.get("/lastLed", dataController.lastLed);
 router.get("/weektemperatures",  dataController.getDayTemperatures);
 router.get("/weekhumids",  dataController.getDayHumidities);
 router.get("/todayWarnings",  dataController.getWarningsInDay);
-// router.get("/tempHumidData", dataController.getDayTempAndHumid);
+router.get("/tempHumidData", dataController.getDayTempAndHumid);
 
 
 router.post("/setFan", dataController.setFan);

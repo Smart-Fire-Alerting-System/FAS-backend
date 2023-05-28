@@ -3,12 +3,10 @@ import { publishData } from "../utils/mttqUtils.js";
 import { adaRequest } from '../utils/axiosUtils.js';
 import { handleReturn } from "../utils/handleResponse.js";
 import * as dataUtils from "../utils/dataUtils.js";
-import '../playground/django-user-profile/venv/Lib/site-packages/django/contrib/admin/static/admin/css/login.css';
 
 export const currentTemperature = async (req, res, next) => {
     adaRequest.get("/feeds/yolo-sensor/data/last")
         .then(({data}) => {
-            console.log("data: ", data);
             res.status(200).json({
                 ...data, 
                 feed_key: "yolo-sensor",
@@ -74,7 +72,6 @@ export const lastLed = async (req, res, next) => {
 
 // set value to adafruit
 export const setFan = async (req, res, next) => {
-    console.log("Fan request: ",req.body);
     const { value } = req.body;
     if (!value) {
         res.status(400);
@@ -122,7 +119,7 @@ export const getDayTemperatures = async (req, res, next) => {
     let params;
     let now = true;
     let today = new Date();
-    console.log(today);
+
     let startD =  new Date(
         `${today.getFullYear()} ${today.getMonth() + 1} ${today.getDate()-7}`
     );;
@@ -134,9 +131,6 @@ export const getDayTemperatures = async (req, res, next) => {
     
     let endDString = endD.toISOString().substring(0, 10) + "T17:00:00Z";
 
-// TODO : Substract 7 hour for the 
-    console.log(startDString);
-    console.log(endDString);
     params = {
         start_time: startDString,
         end_time: endDString,
@@ -164,7 +158,6 @@ export const getDayHumidities = async (req, res, next) => {
     let params;
     let now = true;
     let today = new Date();
-    console.log(today);
     
     let startD;
     let endD;
@@ -180,8 +173,6 @@ export const getDayHumidities = async (req, res, next) => {
     
     let endDString = endD.toISOString().substring(0, 10) + "T17:00:00Z";
 
-    console.log(startDString);
-    console.log(endDString);
     params = {
         start_time: startDString,
         end_time: endDString,
@@ -203,77 +194,76 @@ export const getDayHumidities = async (req, res, next) => {
         });
 };
 
-// export const getDayTempAndHumid = async (req, res, next) => {
-//     let params;
-//     let now = true;
-//     let today = new Date();
-//     console.log(today);
+export const getDayTempAndHumid = async (req, res, next) => {
+    let params;
+    let now = true;
+    let today = new Date();
     
-//     let startD;
-//     let endD;
+    let startD;
+    let endD;
     
-//     startD = new Date(
-//         `${today.getFullYear()} ${today.getMonth() + 1} ${today.getDate()-7}`
-//     );
-//     endD = new Date(
-//         `${today.getFullYear()} ${today.getMonth() + 1} ${today.getDate()}`
-//     );
+    startD = new Date(
+        `${today.getFullYear()} ${today.getMonth() + 1} ${today.getDate()-7}`
+    );
+    endD = new Date(
+        `${today.getFullYear()} ${today.getMonth() + 1} ${today.getDate()}`
+    );
 
-//     let startDString = startD.toISOString().substring(0, 10) + "T17:00:00Z";
+    let startDString = startD.toISOString().substring(0, 10) + "T17:00:00Z";
     
-//     let endDString = endD.toISOString().substring(0, 10) + "T17:00:00Z";
+    let endDString = endD.toISOString().substring(0, 10) + "T17:00:00Z";
 
-//     console.log(startDString);
-//     console.log(endDString);
-//     params = {
-//         start_time: startDString,
-//         end_time: endDString,
-//     };
-//     now = false;
+    params = {
+        start_time: startDString,
+        end_time: endDString,
+    };
+    now = false;
 
-//     let humidData;
-//     let tempData;
-//     adaRequest
-//         .get(`/feeds/dht20-humid/data/chart`, {
-//             params: params,
-//         })
-//         .then(({ data }) => {
-//             let values = data["data"];
-//             humidData = dataUtils.dataCal(values, now);
-//         })
-//         .catch((error) => {
-//             res.status(400);
-//             return next(new Error(error.message));
-//         });
+    let humidData = await adaRequest
+        .get(`/feeds/dht20-humid/data/chart`, {
+            params: params,
+        })
+        .then(({ data }) => {
+            let values = data["data"];
+            return dataUtils.dataCal(values, now);
+        })
+        .catch((error) => {
+            res.status(400);
+            return next(new Error(error.message));
+        });
 
 
-//     adaRequest
-//     .get(`/feeds/yolo-sensor/data/chart`, {
-//         params: params,
-//     })
-//     .then(({ data }) => {
-//         let values = data["data"];
-//         tempData = dataUtils.dataCal(values, now);
-//     })
-//     .catch((error) => {
-//         res.status(400);
-//         return next(new Error(error.message));
-//     });
+    let tempData = await adaRequest.get(`/feeds/yolo-sensor/data/chart`, {
+        params: params,
+    })
+    .then(({ data }) => {
+        let values = data["data"];
+        return dataUtils.dataCal(values, now);
+    })
+    .catch((error) => {
+        res.status(400);
+        return next(new Error(error.message));
+    });
 
 
-//     // procues
-//     console.log("Humid Data:" ,humidData);
-//     console.log("Temp Data:" ,tempData);    
-//     res.status(200);
+    let result = [];
+    for (let i = 0; i < tempData.length; i++) {
+        result.push({
+            dow: tempData[i].dow,
+            temp: tempData[i].value,
+            humid: humidData[i].value,
+        });
+    }
+
+    res.status(200).json(result);
     
-// };
+};
 
 
 export const getWarningsInDay = async (req, res, next) => {
     // let date = req.query["date"] ? req.query["date"] : null;
     let params;
     let today = new Date();
-    console.log(today);
 
 
     let endDString;
@@ -289,10 +279,6 @@ export const getWarningsInDay = async (req, res, next) => {
     }
     // today.setHours();
     endDString = today.toISOString();
-    
-
-    console.log(startDString);
-    console.log(endDString);
     params = {
         start_time: startDString,
         end_time: endDString,
