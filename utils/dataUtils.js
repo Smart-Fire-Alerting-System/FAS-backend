@@ -63,26 +63,16 @@ const extractLast7DaysAverageData = (data) => {
 }
 
 export function dataCal(data, today) {
-    if (data.length > 0) {
-        let result = [];
-        let latest;
-        // if (today) {
-        //     latest = new Date(data[data.length - 1][0]);
-        // } else {
-        //     latest = new Date(data[data.length - 1][0]);
-        //     latest.setHours(23);
-        // }
-        let averageData = extractLast7DaysAverageData(data); 
-        console.log(averageData);
+    let result = [];
+    let latest;
+    let averageData = extractLast7DaysAverageData(data); 
+    console.log(averageData);
 
-        let last7DaysOfWeeksNames = getLast7DaysOfWeeksNames(new Date());
-        for (let count = 6; count >= 0; count--) {
-            result.push({ dow: last7DaysOfWeeksNames[count], value: averageData[count] });
-        }
-        return result;
-    } else {
-        return [];
+    let last7DaysOfWeeksNames = getLast7DaysOfWeeksNames(new Date());
+    for (let count = 6; count >= 0; count--) {
+        result.push({ dow: last7DaysOfWeeksNames[count], value: averageData[count] });
     }
+    return result;
 }
 
 
