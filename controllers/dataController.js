@@ -96,7 +96,7 @@ export const toggleLed = async (req, res, next) => {
         res.status(400);
         return next(new Error("Value is not sent!"));
     } else {
-        let light = parseFloat(value);
+        let light = parseInt(value);
         if (light >= 0 && light <= 1) {
             publishData("yolo-led", light, (result) =>
                 handleReturn(result, res, next)
