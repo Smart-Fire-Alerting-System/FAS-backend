@@ -54,7 +54,7 @@ const realtimeUpdate = (io) => {
         } else if (topic.endsWith("yolo-led")) {
             // Emit a "lightUpdate" event with the new light data
             io.emit("ledUpdate", { led: parseInt(data) });
-            console.log(`Light: ${data}`);
+            console.log(`Light fron gate-way: ${data}`);
         }
     });
 };

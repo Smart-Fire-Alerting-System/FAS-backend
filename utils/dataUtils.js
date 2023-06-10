@@ -43,10 +43,10 @@ const extractLast7DaysData = (data) => {
     let arr = new Array(7).fill([]);
     data.map((e) => {
         const d = new Date(e[0]) ;
-        console.log(d);
-        console.log(d.getDate());
+        // console.log(d);
+        // console.log(d.getDate());
         let daydiff = lastDay_day - d.getDate();
-        console.log(daydiff);
+        // console.log(daydiff);
         arr[daydiff] = [...arr[daydiff], parseFloat(e[1])];
     });
     return arr;
@@ -66,7 +66,7 @@ export function dataCal(data, today) {
     let result = [];
     let latest;
     let averageData = extractLast7DaysAverageData(data); 
-    console.log(averageData);
+    // console.log(averageData);
 
     let last7DaysOfWeeksNames = getLast7DaysOfWeeksNames(new Date());
     for (let count = 6; count >= 0; count--) {
@@ -79,7 +79,7 @@ export function dataCal(data, today) {
 
 
 export const retrieveNumberOfHighTemp = (data) => {
-    console.log(data);
+    // console.log(data);
     const highTemp = 40;
     if (data.length > 0) {
         let count = 0;

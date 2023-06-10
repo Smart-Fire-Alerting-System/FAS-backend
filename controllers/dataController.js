@@ -77,7 +77,7 @@ export const setFan = async (req, res, next) => {
         res.status(400);
         return next(new Error("Value is not sent!"));
     } else {
-        let temperature = parseFloat(value);
+        let temperature = parseInt(value);
         if (temperature >= 0 && temperature <= 100) {
             publishData("yolo-fan", temperature, (result) =>
                 handleReturn(result, res, next)
